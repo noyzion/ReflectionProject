@@ -2,6 +2,7 @@ package reflection.api;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.HashSet;
 import java.util.Set;
 
 public class InvestigatorImp implements Investigator {
@@ -11,10 +12,9 @@ public class InvestigatorImp implements Investigator {
 
 
     @Override
-    public void load(Object anInstanceOfSomething)
-    {
-       this.clazz = anInstanceOfSomething.getClass();
-       this.obj = anInstanceOfSomething;
+    public void load(Object anInstanceOfSomething) {
+        this.clazz = anInstanceOfSomething.getClass();
+        this.obj = anInstanceOfSomething;
     }
 
     @Override
@@ -33,16 +33,21 @@ public class InvestigatorImp implements Investigator {
     }
 
     @Override
+    public String getParentClassSimpleName() {
+        return clazz.getSuperclass().getSimpleName();
+    }
+
+    @Override
     public int getCountOfStaticMethods() {
         Method[] methods = clazz.getMethods();
         int count = 0;
-        for(Method m : methods)
-        {
-            if(Modifier.isStatic((m.getModifiers())))
+        for (Method m : methods) {
+            if (Modifier.isStatic((m.getModifiers())))
                 count++;
         }
         return count;
     }
+
     @Override
     public int getCountOfConstantFields() {
         Field[] fields = clazz.getFields();
@@ -56,12 +61,47 @@ public class InvestigatorImp implements Investigator {
 
     @Override
     public boolean isExtending() {
-        return false;
+        return (!getParentClassSimpleName().equals("Object"));
     }
 
     @Override
     public boolean isParentClassAbstract() {
-        return false;
+        if (isExtending()) {
+            Class superClass = clazz.getSuperclass();
+            return (Modifier.isAbstract(superClass.getModifiers()));
+
+        } else
+            return false;
+    }
+
+
+    @Override
+    public Set<String> getNamesOfAllFieldsIncludingInheritanceChain()
+    {
+        Set<String> allFields = new HashSet<>();
+        Class currClass = this.clazz;
+
+        while (currClass != null) {
+            Field[] fields = currClass.getDeclaredFields();
+            for (Field field : fields) {
+                allFields.add(field.getName());
+            }
+            currClass = currClass.getSuperclass();
+        }
+        return allFields;
+    }
+
+    @Override
+    public Set<String> getAllImplementedInterfaces() {
+        Set<String> implementedInterfaces = new HashSet<>();
+
+        Class<?>[] interfaces = clazz.getInterfaces();
+
+        for (Class<?> inter : interfaces) {
+            implementedInterfaces.add(inter.getSimpleName());
+        }
+        return implementedInterfaces;
+
     }
 
     @Override
@@ -69,7 +109,7 @@ public class InvestigatorImp implements Investigator {
         return 0;
     }
 
-    @Overridek
+    @Override
     public Object createInstance(int numberOfArgs, Object... args) {
         return null;
     }
@@ -79,24 +119,13 @@ public class InvestigatorImp implements Investigator {
         return null;
     }
 
-    @Override
-    public Set<String> getAllImplementedInterfaces() {
-        return Set.of();
-    }
+
 
     @Override
     public String getInheritanceChain(String delimiter) {
         return "";
     }
 
-    @Override
-    public String getParentClassSimpleName() {
-        return "";
-    }
 
-    @Override
-    public Set<String> getNamesOfAllFieldsIncludingInheritanceChain() {
-        return Set.of();
-    }
 
 }
