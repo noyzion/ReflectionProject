@@ -1,8 +1,5 @@
 package reflection.api;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -111,7 +108,7 @@ public class InvestigatorImp implements Investigator {
 
     private String getInheritanceChainHelper(Class<?> currClass, String delimiter) {
         if (currClass.getSimpleName().equals("Object")) {
-            return new String("Object");
+            return "Object";
         } else {
             String inheritance = getInheritanceChainHelper(currClass.getSuperclass(), delimiter);
             inheritance += delimiter;
@@ -151,11 +148,27 @@ public class InvestigatorImp implements Investigator {
 
     @Override
     public Object createInstance(int numberOfArgs, Object... args) {
-        return null;
+        try {
+            Class<?>[] parameterTypes = new Class<?>[numberOfArgs];
+            for (int i = 0; i < numberOfArgs; i++) {
+                parameterTypes[i] = args[i].getClass();
+            }
+
+            Constructor<?> constructor = clazz.getConstructor(parameterTypes);
+
+            return constructor.newInstance(args);
+        } catch (Exception e) {
+            throw new RuntimeException("Error creating instance", e);
+        }
     }
 
     @Override
     public Object elevateMethodAndInvoke(String name, Class<?>[] parametersTypes, Object... args) {
-        return null;
+        try {
+            Method method = clazz.getMethod(name, parametersTypes);
+            return method.invoke(obj, args);
+        } catch (Exception e) {
+            throw new RuntimeException("Error invoking method", e);
+        }
     }
 }
