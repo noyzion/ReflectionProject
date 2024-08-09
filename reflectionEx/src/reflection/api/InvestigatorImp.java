@@ -8,7 +8,6 @@ public class InvestigatorImp implements Investigator {
     private Class<?> clazz;
     private Object obj;
 
-
     @Override
     public void load(Object anInstanceOfSomething) {
         this.clazz = anInstanceOfSomething.getClass();
@@ -17,12 +16,12 @@ public class InvestigatorImp implements Investigator {
 
     @Override
     public int getTotalNumberOfFields() {
-        return clazz.getFields().length;
+        return clazz.getDeclaredFields().length;
     }
 
     @Override
     public int getTotalNumberOfMethods() {
-        return clazz.getMethods().length;
+        return clazz.getDeclaredMethods().length;
     }
 
     @Override
@@ -37,7 +36,7 @@ public class InvestigatorImp implements Investigator {
 
     @Override
     public int getCountOfStaticMethods() {
-        Method[] methods = clazz.getMethods();
+        Method[] methods = clazz.getDeclaredMethods();
         int count = 0;
         for (Method m : methods) {
             if (Modifier.isStatic((m.getModifiers())))
@@ -48,7 +47,7 @@ public class InvestigatorImp implements Investigator {
 
     @Override
     public int getCountOfConstantFields() {
-        Field[] fields = clazz.getFields();
+        Field[] fields = clazz.getDeclaredFields();
         int count = 0;
         for (Field f : fields) {
             if (Modifier.isFinal(f.getModifiers()))
@@ -125,7 +124,7 @@ public class InvestigatorImp implements Investigator {
             for (int i = 0; i < args.length; i++) {
                 parameterTypes[i] = args[i].getClass();
             }
-            Method method = clazz.getMethod(methodName, parameterTypes);
+            Method method = clazz.getDeclaredMethod(methodName, parameterTypes);
             Object result = method.invoke(obj, args);
 
             if (result instanceof Integer) {
@@ -148,27 +147,38 @@ public class InvestigatorImp implements Investigator {
 
     @Override
     public Object createInstance(int numberOfArgs, Object... args) {
+        Class<?>[] parameterTypes = new Class<?>[numberOfArgs];
+        for (int i = 0; i < numberOfArgs; i++) {
+            parameterTypes[i] = getPrimitiveClass(args[i].getClass());
+        }
         try {
-            Class<?>[] parameterTypes = new Class<?>[numberOfArgs];
-            for (int i = 0; i < numberOfArgs; i++) {
-                parameterTypes[i] = args[i].getClass();
-            }
-
             Constructor<?> constructor = clazz.getConstructor(parameterTypes);
-
             return constructor.newInstance(args);
-        } catch (Exception e) {
-            throw new RuntimeException("Error creating instance", e);
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException("Exception occurred while creating instance: " + e.getMessage(), e);
         }
     }
 
     @Override
     public Object elevateMethodAndInvoke(String name, Class<?>[] parametersTypes, Object... args) {
         try {
-            Method method = clazz.getMethod(name, parametersTypes);
+            Method method = clazz.getDeclaredMethod(name, parametersTypes);
+            method.setAccessible(true);
             return method.invoke(obj, args);
         } catch (Exception e) {
             throw new RuntimeException("Error invoking method", e);
         }
+    }
+
+    private Class<?> getPrimitiveClass(Class<?> clazz) {
+        if (clazz == Integer.class) return int.class;
+        if (clazz == Boolean.class) return boolean.class;
+        if (clazz == Character.class) return char.class;
+        if (clazz == Byte.class) return byte.class;
+        if (clazz == Short.class) return short.class;
+        if (clazz == Long.class) return long.class;
+        if (clazz == Float.class) return float.class;
+        if (clazz == Double.class) return double.class;
+        return clazz;
     }
 }
