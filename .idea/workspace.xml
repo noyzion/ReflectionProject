@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e0b70b5a-eb48-42dd-b993-864c79c47d3d" name="Changes" comment="before RunTester">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Changes.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Changes/shelved.patch" beforeDir="false" />
+    <list default="true" id="e0b70b5a-eb48-42dd-b993-864c79c47d3d" name="Changes" comment="done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reflectionEx/src/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reflectionEx/src/reflection/api/InvestigatorImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/reflectionEx/src/reflection/api/InvestigatorImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reflectionEx/src/reflection/api/InvestigatorImp.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +90,7 @@
       <updated>1723059579911</updated>
       <workItem from="1723059580829" duration="6043000" />
       <workItem from="1723103311952" duration="961000" />
-      <workItem from="1723104319103" duration="20690000" />
+      <workItem from="1723104319103" duration="23934000" />
     </task>
     <task id="LOCAL-00001" summary="start">
       <option name="closed" value="true" />
@@ -152,7 +148,15 @@
       <option name="project" value="LOCAL" />
       <updated>1723131933965</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="done">
+      <option name="closed" value="true" />
+      <created>1723231483537</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1723231483537</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -191,6 +195,7 @@
     <MESSAGE value="in process" />
     <MESSAGE value="in process 2" />
     <MESSAGE value="before RunTester" />
-    <option name="LAST_COMMIT_MESSAGE" value="before RunTester" />
+    <MESSAGE value="done" />
+    <option name="LAST_COMMIT_MESSAGE" value="done" />
   </component>
 </project>
